@@ -1,0 +1,1 @@
+# pulumi-az-ts-training-session-3
