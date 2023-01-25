@@ -36,6 +36,19 @@ export = async () => {
         /* */
     });
 
+    const sg = new azure.network.NetworkSecurityGroup("sg", {
+        /* */
+    });
+
+    const sgrule = new azure.network.NetworkSecurityRule("sgrule", {
+        /* */
+    });
+
+    const sgnicassoc = new azure.network.NetworkInterfaceSecurityGroupAssociation("sg-nic-assoc", {
+        /* */
+    });
+
+
     const password = new random.RandomPassword('password', {
         /* */
     })./* */;

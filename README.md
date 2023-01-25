@@ -14,6 +14,7 @@ In this session, you will learn how to create a fully functional VirtualNetwork 
    * A public Subnet (/20)
    * A public IP address
    * A network interface
+   * The necessarity network security group and rule
 3. Create a virtual machine
    * Use a small virtual machine to limit/reduce cost
    * Using the most recent Ubuntu 20.04 LTS
@@ -22,6 +23,7 @@ In this session, you will learn how to create a fully functional VirtualNetwork 
 4. Create stack outputs for:
    * The VM host name or IP address
    * The random password
+   * A configuration admin user name for the VM
 
 ## Bonus/Challenges
 

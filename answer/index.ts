@@ -12,6 +12,8 @@ export = async () => {
 
     const cidrBlock = config.require("cidrBlock");
     const subnetMask = config.require("netmask");
+    const username = config.require("username");
+
 
     const virtualNetworkCidr = new Netmask(cidrBlock.toString());
     const subnetCidr = new Netmask(`${virtualNetworkCidr.base}/${subnetMask}`);
@@ -45,6 +47,29 @@ export = async () => {
         }],
     });
 
+    const sg = new azure.network.NetworkSecurityGroup("sg", {
+        resourceGroupName: resourceGroup.name,
+        location: resourceGroup.location,
+    });
+
+    const sgrule = new azure.network.NetworkSecurityRule("sgrule", {
+        priority: 100,
+        direction: "Inbound",
+        access: "Allow",
+        protocol: "Tcp",
+        sourcePortRange: "*",
+        destinationPortRange: "22",
+        sourceAddressPrefix: "*",
+        destinationAddressPrefix: "*",
+        resourceGroupName: resourceGroup.name,
+        networkSecurityGroupName: sg.name,
+    });
+
+    const sgnicassoc = new azure.network.NetworkInterfaceSecurityGroupAssociation("sg-nic-assoc", {
+        networkInterfaceId: nic.id,
+        networkSecurityGroupId: sg.id,
+    });
+
     const password = new random.RandomPassword('password', {
         length: 33,
         special: false,
@@ -58,9 +83,8 @@ export = async () => {
         deleteOsDiskOnTermination: true,
         osProfile: {
             computerName: "hostname",
-            adminUsername: "pulumi",
+            adminUsername: username,
             adminPassword: password,
-            // customData: args.bootScript,
         },
         osProfileLinuxConfig: {
             disablePasswordAuthentication: false,
@@ -78,6 +102,7 @@ export = async () => {
     });
 
     return {
+        username: username,
         password: password,
         ip: pubIp.ipAddress,
     }
